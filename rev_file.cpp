@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 
@@ -12,11 +13,11 @@ void freenames(char * []);
 int main(int argc, char *argv[])
 {
 	char *list[100];
-    
-    if(argc != 3){
-    	cerr << "Number of argument is not correct!" << endl;
-    	return 1;
-    }
+
+	if(argc != 3){
+		cerr << "Number of argument is not correct!" << endl;
+		return 1;
+	}
 
 	ifstream fin(argv[1]);
 	if(fin.fail()){
@@ -33,11 +34,11 @@ int main(int argc, char *argv[])
 	freadnames(fin,list);
 	fwritenames_reverse(fout,list);
 	freenames(list);
-	
+
 	fin.close();
 	fout.close();
-	
-	return 0; 
+
+	return 0;
 }
 
 void freadnames(ifstream &f,char *list [])
@@ -45,23 +46,28 @@ void freadnames(ifstream &f,char *list [])
 	char x[200];
 
 	int i = 0;
+	string line;
+	// write a while loop to read one string form the input file and put it in x till the end file
+	// inside the loop allocate the dynamic array for list[i]
+	// copy string stored in x to list[i] array using strcpy
+	// increment i
+	while(getline(f, line)){
+		list[i] = new char[line.length()+1];
+		strcpy(list[i], line.c_str());
+		i++;
+	}
 
-	// write a while loop to reads string form the file and put it in x till the end file
-		// inside the loop allocate the dynamic array for list[i]
-		// copy string in x to list[i] array
-		// increment i 
-
-	list[i] = nullptr;  // We put the null to the last pointer to mark that the last element in list
+	list[i] = nullptr;  // IMPORTANT: we put the null to the last pointer in list to mark the last element in list
 }
 void fwritenames_reverse(ofstream &f,char *list [])
 {
 	int i;
 	for(i = 0; list[i] != nullptr ; ++i)
-		;
+	;
 
 	for(int j = i-1; j >= 0 ; --j)
 	{
-		// your code is here
+		f << list[j] << "\n";
 	}
 }
 void freenames(char *list [])
@@ -71,7 +77,3 @@ void freenames(char *list [])
 		delete [] list[i];;
 	}
 }
-
-
-
-
